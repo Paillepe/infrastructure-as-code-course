@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: back-end/package-lock.json
+          cache-dependency-path: apps/back-end/package-lock.json
 
       - name: Install dependencies back
         working-directory: back-end
@@ -54,9 +54,9 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: front-end/package-lock.json
+          cache-dependency-path: apps/front-end/package-lock.json
 
-      - name: Install dependencies back
+      - name: Install dependencies front 
         working-directory: front-end
         run: npm ci
       # run: npm ci dépendances packages-lock.json, pas comme npm install sur packages.json
