@@ -22,23 +22,23 @@ jobs:
           cache-dependency-path: apps/back-end/package-lock.json
 
       - name: Install dependencies back
-        working-directory: back-end
+        working-directory: apps/back-end
         run: npm ci
       # run: npm ci dépendances packages-lock.json, pas comme npm install sur packages.json
 
       # 🧪 Tests
       - name: Run tests back  
-        working-directory: back-end
+        working-directory: apps/back-end
         run: npm test
 
       # 🧹 Lint (eslint)
       - name: Run linter back
-        working-directory: back-end
+        working-directory: apps/back-end
         run: npm run lint
 
       # 🔒 Vulnerability scan
       - name: Security audit back
-        working-directory: back-end
+        working-directory: apps/back-end
         run: npm audit --audit-level=high
       
   # ======= FRONT-END=======
@@ -57,21 +57,21 @@ jobs:
           cache-dependency-path: apps/front-end/package-lock.json
 
       - name: Install dependencies front 
-        working-directory: front-end
+        working-directory: apps/front-end
         run: npm ci
       # run: npm ci dépendances packages-lock.json, pas comme npm install sur packages.json
 
       # 🧪 Tests
       - name: Run tests front  
-        working-directory: front-end
+        working-directory: apps/front-end
         run: npm test
 
       # 🧹 Lint (eslint)
       - name: Run linter front
-        working-directory: front-end
+        working-directory: apps/front-end
         run: npm run lint
 
       # 🔒 Vulnerability scan
       - name: Security audit front
-        working-directory: front-end
+        working-directory: apps/front-end
         run: npm audit --audit-level=high
