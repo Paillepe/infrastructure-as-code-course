@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  Front_Back_CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+    # ======= FRONT-END=======
+
+      - name: Install dependencies front
+        working-directory: front-end
+        run: npm ci
+      # run: npm ci dépendances packages-lock.json, pas comme npm install sur packages.json
+
+      # 🧪 Tests
+      - name: Run tests front  
+        working-directory: front-end
+        run: npm test
+
+      # 🧹 Lint (eslint)
+      - name: Run linter front
+        working-directory: front-end
+        run: npm run lint
+
+      # 🔒 Vulnerability scan
+      - name: Security audit front
+        working-directory: front-end
+        run: npm audit --audit-level=high
+      
+    # ======= BACK-END=======
+
+      - name: Install dependencies back
+        working-directory: back-end
+        run: npm ci
+      # run: npm ci dépendances packages-lock.json, pas comme npm install sur packages.json
+
+      # 🧪 Tests
+      - name: Run tests back
+        working-directory: back-end
+        run: npm test
+
+      # 🧹 Lint (eslint)
+      - name: Run linter back
+        working-directory: back-end
+        run: npm run lint
+
+      # 🔒 Vulnerability scan
+      - name: Security audit back
+        working-directory: back-end
+        run: npm audit --audit-level=high
