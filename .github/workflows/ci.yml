@@ -5,8 +5,11 @@ on:
     branches: [ main, test-ci ]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  # ======= BACK-END=======
+  # ======= BACK-END =======
   Back_CI:
     runs-on: ubuntu-latest
 
