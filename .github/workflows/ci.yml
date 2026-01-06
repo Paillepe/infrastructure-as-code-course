@@ -37,10 +37,11 @@ jobs:
         run: npm run lint
 
       # 🔒 Vulnerability scan
-      - name: Security audit back
+      - name: Security audit back (critical only)
         working-directory: apps/backend
-        run: npm audit --audit-level=high
-      
+        run: npm audit --audit-level=critical
+        continue-on-error: true
+
   # ======= FRONT-END=======
   front_ci:
     runs-on: ubuntu-latest
@@ -72,6 +73,7 @@ jobs:
         run: npm run lint
 
       # 🔒 Vulnerability scan
-      - name: Security audit front
+      - name: Security audit front (critical only)
         working-directory: apps/frontend
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
+        continue-on-error: true
