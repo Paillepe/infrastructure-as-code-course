@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [ main, dev, recette ]
-    # Ici c'est pour inclure les push avec les tags de version : vxxx
+    # Ici c'est pour inclure les push avec les tags de version : vx.x.x
     tags:
       - "v*"
   pull_request:
