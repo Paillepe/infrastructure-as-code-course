@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true
-    allowedHosts: [
-      '.azurecontainerapps.io'
+    //allowedHosts: [
+    //  '.azurecontainerapps.io'
     ]
 
 	  //  proxy: {
