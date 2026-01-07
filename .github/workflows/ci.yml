@@ -8,7 +8,9 @@ on:
 permissions:
   contents: read
 
-REGISTRY:${{secrets.ACR_LOGIN_SERVER}}
+  # Variables globales (utilisent les secrets GitHub)
+env:
+  REGISTRY: ${{secrets.ACR_LOGIN_SERVER}}
 
 jobs:
   # ======= BACK-END =======
