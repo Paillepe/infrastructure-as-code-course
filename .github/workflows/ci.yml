@@ -85,29 +85,29 @@ jobs:
         run: npm audit --audit-level=critical
         continue-on-error: true
 
- # BANK-END DOCKER AZURE
- back_docker:
-  runs-on: ubuntu-latest
-  needs: Back_CI
+   # BANK-END DOCKER AZURE
+   back_docker:
+     runs-on: ubuntu-latest
+     needs: Back_CI
 
-  steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v4
 
-      - name: Login to Azure Container Registry
-        run: |
-          echo "${{ secrets.ACR_PASSWORD }}" | docker login $REGISTRY \
-            -u "${{ secrets.ACR_USERNAME }}" --password-stdin
+        - name: Login to Azure Container Registry
+          run: |
+            echo "${{ secrets.ACR_PASSWORD }}" | docker login $REGISTRY \
+              -u "${{ secrets.ACR_USERNAME }}" --password-stdin
 
-      - name: Build backend Docker image
-        run: |
-          docker build \
-            -t $REGISTRY/backend-node:latest \
-            apps/backend
+        - name: Build backend Docker image
+          run: |
+            docker build \
+              -t $REGISTRY/backend-node:latest \
+              apps/backend
 
-      - name: Push backend Docker image
-        run: |
-          docker push $REGISTRY/backend-node:latest
+        - name: Push backend Docker image
+          run: |
+            docker push $REGISTRY/backend-node:latest
 
   # ======= FRONT-END DOCKER =======
   front_docker:
@@ -132,6 +132,4 @@ jobs:
       - name: Push frontend Docker image
         run: |
           docker push $REGISTRY/frontend-node:latest
-
-
 
