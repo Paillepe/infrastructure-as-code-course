@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, test-ci ]
+    branches: [ main, dev, recette ]
   pull_request:
 
 permissions:
@@ -11,6 +11,7 @@ permissions:
   # Variables globales (utilisent les secrets GitHub)
 env:
   REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
+  VERSION: ${{ github.ref_name }}
 
 jobs:
   # ======= BACK-END =======
@@ -85,12 +86,10 @@ jobs:
         run: npm audit --audit-level=critical
         continue-on-error: true
 
-  # BANK-END DOCKER AZURE
+  # ========= BANK-END DOCKER AZURE =========
   back_docker:
     runs-on: ubuntu-latest
     needs: Back_CI
-    env:
-      SHORT_SHA: ${{  github.sha  }}
 
     steps:
       - name: Checkout code
@@ -105,20 +104,18 @@ jobs:
         run: |
            docker build \
             -t $REGISTRY/backend-node:latest \
-            -t $REGISTRY/backend-node:${SHORT_SHA::7} \
+            -t $REGISTRY/backend-node:${VERSION} \
              apps/backend
 
       - name: Push backend Docker image
         run: |
-           #docker push $REGISTRY/backend-node:latest
-           docker push $REGISTRY/backend-node:${SHORT_SHA::7}
+           docker push $REGISTRY/backend-node:latest
+           docker push $REGISTRY/backend-node:${VERSION}
 
   # ======= FRONT-END DOCKER =======
   front_docker:
     runs-on: ubuntu-latest
     needs: front_ci
-    env:
-      SHORT_SHA: ${{  github.sha  }}
 
     steps:
       - name: Checkout code
@@ -133,11 +130,11 @@ jobs:
         run: |
           docker build \
            -t $REGISTRY/frontend-node:latest \
-           -t $REGISTRY/frontend-node:${SHORT_SHA::7} \
+           -t $REGISTRY/frontend-node:${VERSION} \
             apps/frontend
 
       - name: Push frontend Docker image
         run: |
-          docker push $REGISTRY/frontend-node:${SHORT_SHA::7}
+          docker push $REGISTRY/frontend-node:${VERSION}
           docker push $REGISTRY/frontend-node:latest
 
