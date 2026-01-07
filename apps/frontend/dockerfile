@@ -11,7 +11,8 @@ COPY . ./
 
 EXPOSE 3001
 
-CMD ["npm", "run", "build"]
+#Avant pour le DEV : CMD ["npm", "run", "dev"]
+RUN npm run build
 
 
 # ===== PROD =====
