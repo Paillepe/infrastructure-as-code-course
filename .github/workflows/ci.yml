@@ -221,14 +221,12 @@ jobs:
       - name: Build backend Docker image
         run: |
           docker build \
-            -t "$REGISTRY/backend-node:latest" \
             -t "$REGISTRY/backend-node:$VERSION" \
             apps/backend
 
       # 7️⃣ Push des images
       - name: Push backend Docker image
         run: |
-          docker push "$REGISTRY/backend-node:latest"
           docker push "$REGISTRY/backend-node:$VERSION"
 
   # ======= FRONT-END DOCKER =======
@@ -275,12 +273,10 @@ jobs:
       - name: Build frontend Docker image
         run: |
           docker build \
-            -t "$REGISTRY/frontend-node:latest" \
             -t "$REGISTRY/frontend-node:$VERSION" \
             apps/frontend
 
       # 7️⃣ Push des images
       - name: Push frontend Docker image
         run: |
-          docker push "$REGISTRY/frontend-node:latest"
           docker push "$REGISTRY/frontend-node:$VERSION"
