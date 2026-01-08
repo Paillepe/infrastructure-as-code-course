@@ -189,7 +189,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-        fetch-depth: 0
+          fetch-depth: 0
 
       - name: Sync with bumped commit
         run: |
@@ -251,7 +251,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-        fetch-depth: 0
+          fetch-depth: 0
 
       - name: Sync with bumped commit
         run: |
