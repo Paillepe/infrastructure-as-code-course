@@ -173,7 +173,7 @@ jobs:
         continue-on-error: true
 
   # ========= BANK-END DOCKER AZURE =========
-back_docker:
+  back_docker:
     runs-on: ubuntu-latest
     needs: Back_CI
 
@@ -225,7 +225,7 @@ back_docker:
           docker push "$REGISTRY/backend-node:$VERSION"
 
   # ======= FRONT-END DOCKER =======
-front_docker:
+  front_docker:
     runs-on: ubuntu-latest
     needs: front_ci
 
