@@ -15,9 +15,91 @@ permissions:
   # Variables globales (utilisent les secrets GitHub)
 env:
   REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
-  VERSION: ${{ github.ref_name }}
+  #Ancien version pour le versionning
+  #VERSION: ${{ github.ref_name }}
 
 jobs:
+# ======================================================
+# 🔢 VERSIONING (AVANT TOUT)
+# ======================================================
+  versioning:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    # 🔑 Écriture autorisée UNIQUEMENT ici
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Git config
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Compute bump intent
+        id: bump
+        run: |
+          MSG="$(git log -1 --pretty=%B)"
+          if echo "$MSG" | grep -q "\[major\]"; then
+            echo "kind=major" >> $GITHUB_OUTPUT
+          elif echo "$MSG" | grep -q "\[minor\]"; then
+            echo "kind=minor" >> $GITHUB_OUTPUT
+          elif echo "$MSG" | grep -q "\[patch\]"; then
+            echo "kind=patch" >> $GITHUB_OUTPUT
+          else
+            echo "kind=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Version frontend & backend
+        run: |
+          set -e
+          BRANCH="${{ github.ref_name }}"
+          KIND="${{ steps.bump.outputs.kind }}"
+
+          version_pkg () {
+            DIR=$1
+            PREID=$2
+            cd "$DIR"
+
+            if [ "$BRANCH" = "main" ]; then
+              BASE="$(node -p "require('./package.json').version.split('-')[0]")"
+              npm version "$BASE"
+            else
+              if [ "$KIND" = "patch" ]; then npm version prepatch --preid=$PREID
+              elif [ "$KIND" = "minor" ]; then npm version preminor --preid=$PREID
+              elif [ "$KIND" = "major" ]; then npm version premajor --preid=$PREID
+              else npm version prerelease --preid=$PREID
+              fi
+            fi
+            cd -
+          }
+
+          if [ "$BRANCH" = "dev" ]; then
+            version_pkg apps/frontend dev
+            version_pkg apps/backend dev
+          elif [ "$BRANCH" = "recette" ]; then
+            version_pkg apps/frontend rc
+            version_pkg apps/backend rc
+          elif [ "$BRANCH" = "main" ]; then
+            version_pkg apps/frontend rc
+            version_pkg apps/backend rc
+          fi
+
+      - name: Push versions & tags
+        run: |
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin --tags
+
   # ======= BACK-END =======
   Back_CI:
     runs-on: ubuntu-latest
