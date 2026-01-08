@@ -20,7 +20,7 @@ env:
 
 jobs:
 # ======================================================
-# 🔢  VERSIONING (AVANT TOUT)
+# 🔢   VERSIONING (AVANT TOUT)
 # ======================================================
   versioning:
     if: github.event_name == 'push'
