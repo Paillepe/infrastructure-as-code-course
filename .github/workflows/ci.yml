@@ -211,7 +211,7 @@ jobs:
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "Backend VERSION=$VERSION"
 
-      # 4️⃣ Sécurité : on échoue si VERSION est vide
+      # 4️⃣ Sécurité :  on échoue si VERSION est vide
       - name: Check backend version
         run: |
           if [ -z "$VERSION" ]; then
