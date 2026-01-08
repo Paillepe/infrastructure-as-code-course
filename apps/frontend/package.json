@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node -e \"console.log('✅ tests OK (placeholder)');\""
+    "test": "node -e \"console.log('✅ test OK (placeholder)');\""
   },
   "dependencies": {
     "react": "^19.2.0",
