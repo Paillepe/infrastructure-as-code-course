@@ -229,7 +229,7 @@ jobs:
         run: |
           docker push "$REGISTRY/backend-node:$VERSION"
 
-  # ======= FRONT-END DOCKER =======
+  # ======= FRONT-END DOCKER ======= 
   front_docker:
     runs-on: ubuntu-latest
     needs:
