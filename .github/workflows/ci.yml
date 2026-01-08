@@ -188,8 +188,8 @@ jobs:
       # 1️⃣ Récupération du code
       - name: Checkout code
         uses: actions/checkout@v4
-       with:
-       fetch-depth: 0
+        with:
+        fetch-depth: 0
 
       - name: Sync with bumped commit
         run: |
@@ -211,7 +211,7 @@ jobs:
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "Backend VERSION=$VERSION"
 
-      # 4️⃣ Sécurité :  on échoue si VERSION est vide
+      # 4️⃣ Sécurité : on échoue si VERSION est vide
       - name: Check backend version
         run: |
           if [ -z "$VERSION" ]; then
