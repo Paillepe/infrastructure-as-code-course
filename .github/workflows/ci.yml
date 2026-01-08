@@ -81,10 +81,11 @@ jobs:
               else npm version prerelease --preid=$PREID
               fi
             fi
-            cd -
             
             git add package.json package-lock.json
             git commit -m "chore($DIR): bump version"
+            
+            cd -
           }
 
 
