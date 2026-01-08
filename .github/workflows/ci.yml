@@ -82,7 +82,11 @@ jobs:
               fi
             fi
             cd -
+            
+            git add package.json package-lock.json
+            git commit -m "chore($DIR): bump version"
           }
+
 
           if [ "$BRANCH" = "dev" ]; then
             version_pkg apps/frontend dev
