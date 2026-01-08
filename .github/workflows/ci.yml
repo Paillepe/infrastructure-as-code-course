@@ -173,54 +173,105 @@ jobs:
         continue-on-error: true
 
   # ========= BANK-END DOCKER AZURE =========
-  back_docker:
+back_docker:
     runs-on: ubuntu-latest
     needs: Back_CI
 
     steps:
+      # 1️⃣ Récupération du code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Node requis pour lire package.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3️⃣ Lecture de la version backend
+      - name: Read backend version
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./apps/backend/package.json').version")"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Backend VERSION=$VERSION"
+
+      # 4️⃣ Sécurité : on échoue si VERSION est vide
+      - name: Check backend version
+        run: |
+          if [ -z "$VERSION" ]; then
+            echo "❌ VERSION is empty"
+            exit 1
+          fi
+
+      # 5️⃣ Login Azure Container Registry
       - name: Login to Azure Container Registry
         run: |
-           echo "${{ secrets.ACR_PASSWORD }}" | docker login $REGISTRY \
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login "$REGISTRY" \
             -u "${{ secrets.ACR_USERNAME }}" --password-stdin
 
+      # 6️⃣ Build de l’image Docker
       - name: Build backend Docker image
         run: |
-           docker build \
-            -t $REGISTRY/backend-node:latest \
-            -t $REGISTRY/backend-node:${VERSION} \
-             apps/backend
+          docker build \
+            -t "$REGISTRY/backend-node:latest" \
+            -t "$REGISTRY/backend-node:$VERSION" \
+            apps/backend
 
+      # 7️⃣ Push des images
       - name: Push backend Docker image
         run: |
-           docker push $REGISTRY/backend-node:latest
-           docker push $REGISTRY/backend-node:${VERSION}
+          docker push "$REGISTRY/backend-node:latest"
+          docker push "$REGISTRY/backend-node:$VERSION"
 
   # ======= FRONT-END DOCKER =======
-  front_docker:
+front_docker:
     runs-on: ubuntu-latest
     needs: front_ci
 
     steps:
+      # 1️⃣ Récupération du code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Node requis pour lire package.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3️⃣ Lecture de la version frontend
+      - name: Read frontend version
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./apps/frontend/package.json').version")"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Frontend VERSION=$VERSION"
+
+      # 4️⃣ Sécurité : on échoue si VERSION est vide
+      - name: Check frontend version
+        run: |
+          if [ -z "$VERSION" ]; then
+            echo "❌ VERSION is empty"
+            exit 1
+          fi
+
+      # 5️⃣ Login Azure Container Registry
       - name: Login to Azure Container Registry
         run: |
-          echo "${{ secrets.ACR_PASSWORD }}" | docker login $REGISTRY \
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login "$REGISTRY" \
             -u "${{ secrets.ACR_USERNAME }}" --password-stdin
 
+      # 6️⃣ Build de l’image Docker
       - name: Build frontend Docker image
         run: |
           docker build \
-           -t $REGISTRY/frontend-node:latest \
-           -t $REGISTRY/frontend-node:${VERSION} \
+            -t "$REGISTRY/frontend-node:latest" \
+            -t "$REGISTRY/frontend-node:$VERSION" \
             apps/frontend
 
+      # 7️⃣ Push des images
       - name: Push frontend Docker image
         run: |
-          docker push $REGISTRY/frontend-node:${VERSION}
-          docker push $REGISTRY/frontend-node:latest
-
+          docker push "$REGISTRY/frontend-node:latest"
+          docker push "$REGISTRY/frontend-node:$VERSION"
