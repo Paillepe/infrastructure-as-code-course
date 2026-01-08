@@ -180,7 +180,9 @@ jobs:
   #  ========= BANK-END DOCKER AZURE =========
   back_docker:
     runs-on: ubuntu-latest
-    needs: Back_CI
+    needs:
+      - Back_CI
+      - versionning
 
     steps:
       # 1️⃣ Récupération du code
@@ -232,7 +234,9 @@ jobs:
   # ======= FRONT-END DOCKER =======
   front_docker:
     runs-on: ubuntu-latest
-    needs: front_ci
+    needs:
+      - front_ci
+      - versionning
 
     steps:
       # 1️⃣ Récupération du code
