@@ -189,7 +189,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Node requis pour lire package.json
+      # 2️⃣ Node requis pour lire package.json 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
