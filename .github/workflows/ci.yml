@@ -188,6 +188,14 @@ jobs:
       # 1️⃣ Récupération du code
       - name: Checkout code
         uses: actions/checkout@v4
+       with:
+       fetch-depth: 0
+
+      - name: Sync with bumped commit
+        run: |
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git pull origin ${{ github.ref_name }}
 
       # 2️⃣ Node requis pour lire package.json
       - name: Setup Node.js
@@ -242,6 +250,14 @@ jobs:
       # 1️⃣ Récupération du code
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+        fetch-depth: 0
+
+      - name: Sync with bumped commit
+        run: |
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git pull origin ${{ github.ref_name }}
 
       # 2️⃣ Node requis pour lire package.json
       - name: Setup Node.js
