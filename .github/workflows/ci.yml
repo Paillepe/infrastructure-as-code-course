@@ -142,7 +142,7 @@ jobs:
         continue-on-error: true
 
   # ======= FRONT-END=======
-  front_ci:
+  Front_CI:
     runs-on: ubuntu-latest
 
     steps:
