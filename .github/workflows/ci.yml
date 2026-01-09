@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [ main, dev, recette ]
-    # Ici c'est pour inclure les push avec les tags de version : vx.x.x
+    # Inclure les push avec les tags de version : vx.x.x
     # * pour toutes les valeurs
     tags:
       - "v*"
@@ -20,7 +20,7 @@ env:
 
 jobs:
 # ======================================================
-# 🔢  VERSIONING (AVANT TOUT)
+# 🔢   VERSIONING (AVANT TOUT)
 # ======================================================
   versioning:
     if: github.event_name == 'push'
@@ -197,7 +197,7 @@ jobs:
           git checkout ${{ github.ref_name }}
           git pull origin ${{ github.ref_name }}
 
-      # 2️⃣ Node requis pour lire package.json
+      # 2️⃣ Node requis pour lire package.json 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -229,17 +229,15 @@ jobs:
       - name: Build backend Docker image
         run: |
           docker build \
-            -t "$REGISTRY/backend-node:latest" \
             -t "$REGISTRY/backend-node:$VERSION" \
             apps/backend
 
       # 7️⃣ Push des images
       - name: Push backend Docker image
         run: |
-          docker push "$REGISTRY/backend-node:latest"
           docker push "$REGISTRY/backend-node:$VERSION"
 
-  # ======= FRONT-END DOCKER =======
+  # ======= FRONT-END DOCKER ======= 
   front_docker:
     runs-on: ubuntu-latest
     needs:
@@ -291,12 +289,10 @@ jobs:
       - name: Build frontend Docker image
         run: |
           docker build \
-            -t "$REGISTRY/frontend-node:latest" \
             -t "$REGISTRY/frontend-node:$VERSION" \
             apps/frontend
 
       # 7️⃣ Push des images
       - name: Push frontend Docker image
         run: |
-          docker push "$REGISTRY/frontend-node:latest"
           docker push "$REGISTRY/frontend-node:$VERSION"

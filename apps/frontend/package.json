@@ -1,7 +1,11 @@
 {
   "name": "frontend",
   "private": true,
+<<<<<<< HEAD
   "version": "0.0.1",
+=======
+  "version": "1.0.0-rc.2",
+>>>>>>> recette
   "type": "module",
   "scripts": {
     "dev": "vite",
